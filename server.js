@@ -6,7 +6,9 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+require('dotenv').config({path: '.env'});
 const port = 3000 | process.env.PORT
+
 
 server.listen(port, () => {
     console.log(`Listening on ${port}`);
