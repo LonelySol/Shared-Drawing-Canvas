@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
+    <script src="https://cdn.socket.io/4.5.3/socket.io.min.js"
+        integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi"
+        crossorigin="anonymous"></script>
+    <title>Drawing</title>
+    <style>
+        body {
+            position: absolute;
+            margin: 0px;
+            height: 100%;
+            overflow-y: hidden;
+         }
+    </style>
+</head>
+
+<body>
+    <script>
+        var socket = io();
+        var drawings = []
+        const button = document.getElementById("clear")
+        
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+        const col = [getRandomInt(255), getRandomInt(255), getRandomInt(255)]
+        function setup() {
+            createCanvas(window.innerWidth, window.innerHeight);
+            background(204);
+        }
+
+        //get all previous data from server
+        socket.on('startingData', (data) => {
+            drawings = data
+        })
+
+        //get drawing data
+        socket.on('drawing', (data) => {
+            drawings.push(data)
+            //console.log(data)
+        })
+
+        async function draw() {
+            if (mouseIsPressed) {
+                data = { "x": mouseX, "y": mouseY, "col": col }
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                };
+
+                //send data to server
+                socket.emit('drawing', data)
+            }
+
+            //draw all elements
+            if (drawings.length > 0) {
+                for (i = 0; i < drawings.length; i++) {
+                    //console.log(drawings[i])
+                    noStroke()
+                    fill(drawings[i]["col"]);
+                    circle(drawings[i]["x"], drawings[i]["y"], 7)
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
