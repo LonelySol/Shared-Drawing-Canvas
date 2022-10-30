@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
 
 var database = [] //stores all data
 
+//server-client connection
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('disconnect', () => {
