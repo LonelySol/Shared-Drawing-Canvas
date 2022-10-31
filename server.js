@@ -1,6 +1,4 @@
-const { Socket } = require('dgram');
 const express = require('express');
-const fetch = import('node-fetch');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -9,15 +7,14 @@ const io = new Server(server);
 require('dotenv').config({path: '.env'});
 const port = process.env.PORT | 3000
 
-
-server.listen(port, () => {
-    console.log(`Listening on ${port}`);
-});
 //send index.html to client
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+server.listen(port, () => {
+    console.log(`Listening on ${port}`);
+});
 
 var database = [] //stores all data
 
