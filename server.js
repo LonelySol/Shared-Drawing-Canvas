@@ -4,11 +4,14 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-require('dotenv').config({path: '.env'});
+require('dotenv').config({ path: '.env' });
 const port = process.env.PORT | 3000
 
 //send index.html to client
-app.use(express.static('/public'));
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
+
 server.listen(port, () => {
     console.log(`Listening on ${port}`);
 });
