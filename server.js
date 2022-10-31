@@ -8,9 +8,6 @@ require('dotenv').config({path: '.env'});
 const port = process.env.PORT | 3000
 
 //send index.html to client
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
 app.use(express.static('/public'));
 server.listen(port, () => {
     console.log(`Listening on ${port}`);
