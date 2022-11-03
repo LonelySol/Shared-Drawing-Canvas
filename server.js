@@ -3,7 +3,16 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const { instrument } = require("@socket.io/admin-ui");
+const io = new Server(server, {
+    cors: {
+        origin: ["https://admin.socket.io"],
+        credentials: true
+      }
+});
+instrument(io, {
+    auth: false
+  });
 const port = process.env.PORT || 3000
 require('dotenv').config({ path: '.env' });
 
